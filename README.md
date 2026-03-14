@@ -29,3 +29,4 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
     - [Grafana](https://grafana.com/docs/grafana/latest/)
     - [Prometheus Operator](https://prometheus-operator.dev/docs/getting-started/introduction/)
 - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) - [chart](https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server)
+- [kyverno](https://kyverno.io/) - [chart](https://github.com/kyverno/kyverno/tree/main/charts/kyverno)
