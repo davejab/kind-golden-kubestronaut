@@ -7,8 +7,13 @@ backgroundController:
 cleanupController:
   serviceMonitor:
     enabled: true
+crds:
+  reportsServer:
+    enabled: true
 grafana:
   enabled: true
 reportsController:
   serviceMonitor:
     enabled: true
+reportsServer:
+  enabled: true
