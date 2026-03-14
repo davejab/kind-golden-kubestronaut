@@ -1,0 +1,18 @@
+apps:
+- name: prometheus-operator-crds
+  namespace: monitoring
+  repo: https://prometheus-community.github.io/helm-charts
+  chart: prometheus-operator-crds
+  version: 27.0.0
+- name: cilium
+  namespace: kube-system
+  repo: https://helm.cilium.io/
+  chart: cilium
+  version: 1.19.1
+- name: kube-prometheus-stack
+  namespace: monitoring
+  repo: https://prometheus-community.github.io/helm-charts
+  chart: kube-prometheus-stack
+  version: 82.10.0
+  message: |
+    kubectl get secret -n monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo

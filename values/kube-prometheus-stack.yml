@@ -1,0 +1,31 @@
+alertmanager:
+  alertmanagerSpec:
+    routePrefix: "/alertmanager"
+  enabled: true
+  ingress:
+    enabled: true
+    hosts: []
+    paths:
+    - "/alertmanager"
+crds:
+  enabled: false  
+grafana:
+  grafana.ini:
+    server:
+      root_url: http://{{ include "grafana.fullname" . }}.{{ include "grafana.namespace" . }}.svc.cluster.local/grafana/
+      serve_from_sub_path: true
+  ingress:
+    enabled: true
+    hosts: []
+    path: /grafana
+    pathType: Prefix
+prometheus:
+  ingress:
+    enabled: true
+    hosts: []
+    paths:
+    - /prometheus
+  prometheusSpec:
+    externalUrl: "/prometheus/"
+    ignoreNamespaceSelectors: true
+    routePrefix: "/prometheus/"

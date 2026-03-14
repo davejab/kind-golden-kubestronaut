@@ -1,0 +1,38 @@
+cni:
+  exclusive: false
+dashboards:
+  enabled: true
+envoy:
+  enabled: false
+  prometheus:
+    enabled: false
+hubble:
+  enabled: true
+  metrics:
+    dashboards:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+  relay:
+    enabled: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+  ui:
+    baseUrl: "/hubble/"
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+      - ""
+ipam:
+  mode: kubernetes
+operator:
+  prometheus:
+    serviceMonitor:
+      enabled: true
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
