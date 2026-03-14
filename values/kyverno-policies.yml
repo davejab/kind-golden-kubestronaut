@@ -1,0 +1,85 @@
+policyExclude:
+  disallow-capabilities:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        namespaces:
+        - kube-system
+  disallow-host-namespaces:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        - etcd-*-control-plane
+        - kube-apiserver-*-control-plane
+        - kube-controller-manager-*-control-plane
+        - kube-prometheus-stack-prometheus-node-exporter-*
+        - kube-proxy-*
+        - kube-scheduler-*-control-plane
+        namespaces:
+        - kube-system
+        - monitoring
+  disallow-host-path:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        - etcd-*-control-plane
+        - kube-apiserver-*-control-plane
+        - kube-controller-manager-*-control-plane
+        - kube-prometheus-stack-prometheus-node-exporter-*
+        - kube-proxy-*
+        - kube-scheduler-*-control-plane
+        namespaces:
+        - kube-system
+        - monitoring
+  disallow-host-ports:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        - etcd-*-control-plane
+        - kube-apiserver-*-control-plane
+        - kube-controller-manager-*-control-plane
+        - kube-prometheus-stack-prometheus-node-exporter-*
+        - kube-scheduler-*-control-plane
+        namespaces:
+        - kube-system
+        - monitoring
+  disallow-privileged-containers:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        - kube-proxy-*
+        namespaces:
+        - kube-system
+  disallow-selinux:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        namespaces:
+        - kube-system
+  restrict-seccomp:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - cilium*
+        namespaces:
+        - kube-system
