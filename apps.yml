@@ -16,3 +16,8 @@ apps:
   version: 82.10.0
   message: |
     kubectl get secret -n monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo
+- name: metrics-server
+  namespace: kube-system
+  repo: https://kubernetes-sigs.github.io/metrics-server
+  chart: metrics-server
+  version: 3.13.0
