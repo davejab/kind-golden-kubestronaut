@@ -29,3 +29,4 @@ prometheus:
     externalUrl: "/prometheus/"
     ignoreNamespaceSelectors: true
     routePrefix: "/prometheus/"
+    serviceMonitorSelectorNilUsesHelmValues: false
