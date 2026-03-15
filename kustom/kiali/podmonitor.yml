@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kiali-operator
+  namespace: istio-system
+spec:
+  namespaceSelector:
+    matchNames:
+    - istio-system
+  selector:
+    matchLabels:
+      app: kiali-operator
+  podMetricsEndpoints:
+  - port: http-metrics

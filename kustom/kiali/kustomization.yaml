@@ -1,0 +1,4 @@
+resources:
+  - all.yml
+  - podmonitor.yml
+  - servicemonitor.yml

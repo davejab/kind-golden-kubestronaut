@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-cni
+  namespace: istio-system
+spec:
+  namespaceSelector:
+    matchNames:
+    - istio-system
+  selector:
+    matchLabels:
+      k8s-app: istio-cni-node
+  podMetricsEndpoints:
+  - port: metrics

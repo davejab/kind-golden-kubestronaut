@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cat <&0 > $1/all.yml
+kubectl kustomize $1 && rm $1/all.yml

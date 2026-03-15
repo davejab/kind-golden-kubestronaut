@@ -41,15 +41,18 @@ install() {
     values_file=$(dirname $0)/values/$name.yml
     [[ -f $values_file ]] && helm_args="$helm_args --values $values_file"
 
+    # append kustomize post render if it exists
+    kustom=$(dirname $0)/kustom/$name/
+    [[ -d $kustom ]] && helm_args="$helm_args --post-renderer kustomize --post-renderer-args $kustom"
+
     # run helm install
     helm upgrade $helm_args
 
     [[ ! "$message" == "null" ]] && echo "" && echo "$message"
-
-    # apply additional manifests if they exist
-    manifests=$(dirname $0)/manifests/$name/
-    [[ -d $manifests ]] && kubectl apply -f $manifests
 }
+
+# install helm kustomize plugin
+helm plugin install kustom/ > /dev/null 2>&1
 
 if [[ "$target_app" == "" ]]; then
     # no target app specified, install all apps
