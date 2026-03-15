@@ -98,3 +98,4 @@ policyExclude:
         - cilium*
         namespaces:
         - kube-system
+validationFailureAction: Enforce
