@@ -1,0 +1,19 @@
+cr:
+  create: true
+  namespace: istio-system
+  spec:
+    auth:
+      strategy: "anonymous"
+    deployment:
+      ingress:
+        class_name: cloud-provider-kind
+        enabled: true
+    external_services:
+      grafana:
+        internal_url: 'http://kube-prometheus-stack-grafana.monitoring/grafana'
+      istio:
+        gateway_api_classes:
+        - class_name: cloud-provider-kind
+          name: cloud-provider-kind
+      prometheus:
+        url: "http://kube-prometheus-stack-prometheus.monitoring:9090/prometheus"

@@ -31,3 +31,5 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) - [chart](https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server)
 - [Kyverno](https://kyverno.io/) - [chart](https://github.com/kyverno/kyverno/tree/main/charts/kyverno)
     - [Policies](https://github.com/kyverno/kyverno/tree/main/charts/kyverno-policies)
+- [istio](https://istio.io/) - [charts](https://github.com/istio/istio/tree/master/manifests/charts)
+- [kiali](https://kiali.io/) - [chart](https://github.com/kiali/helm-charts/tree/master/kiali-operator)

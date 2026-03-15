@@ -6,7 +6,10 @@ policyExclude:
         - Pod
         names:
         - cilium*
+        - istio-cni-node-*
+        - ztunnel-*
         namespaces:
+        - istio-system
         - kube-system
   disallow-host-namespaces:
     any:
@@ -32,12 +35,15 @@ policyExclude:
         names:
         - cilium*
         - etcd-*-control-plane
+        - istio-cni-node-*
         - kube-apiserver-*-control-plane
         - kube-controller-manager-*-control-plane
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-proxy-*
         - kube-scheduler-*-control-plane
+        - ztunnel-*
         namespaces:
+        - istio-system
         - kube-system
         - monitoring
   disallow-host-ports:
@@ -74,6 +80,15 @@ policyExclude:
         - cilium*
         namespaces:
         - kube-system
+  restrict-apparmor-profiles:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - istio-cni-node*
+        namespaces:
+        - istio-system
   restrict-seccomp:
     any:
     - resources:
