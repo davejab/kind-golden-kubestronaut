@@ -17,6 +17,8 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 ./install.sh -wq
 # install specific app
 ./install.sh -wqa cilium
+# print available ingress
+./ingress.sh
 # teardown kind cluster
 ./teardown.sh
 ```
@@ -33,3 +35,4 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
     - [Policies](https://github.com/kyverno/kyverno/tree/main/charts/kyverno-policies)
 - [istio](https://istio.io/) - [charts](https://github.com/istio/istio/tree/master/manifests/charts)
 - [kiali](https://kiali.io/) - [chart](https://github.com/kiali/helm-charts/tree/master/kiali-operator)
+- [argocd](https://argo-cd.readthedocs.io/en/stable/) - [chart](https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd)
