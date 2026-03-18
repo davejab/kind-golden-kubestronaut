@@ -54,3 +54,8 @@ apps:
   repo: https://kiali.org/helm-charts
   chart: kiali-operator
   version: 2.22.0
+- name: argocd
+  namespace: argocd
+  repo: https://argoproj.github.io/argo-helm
+  chart: argo-cd
+  version: 9.4.7

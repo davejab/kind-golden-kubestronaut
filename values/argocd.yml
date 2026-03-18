@@ -1,0 +1,50 @@
+applicationSet:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+commitServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+configs:
+  cm:
+    users.anonymous.enabled: true
+  params:
+    server.insecure: true
+    server.rootpath: "/argocd"
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+dex:
+  enabled: false
+global:
+  domain: ""
+notifications:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+redis:
+  exporter:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+server:
+  ingress:
+    enabled: true
+    path: /argocd
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
