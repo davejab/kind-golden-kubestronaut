@@ -8,6 +8,8 @@ cr:
       ingress:
         class_name: cloud-provider-kind
         enabled: true
+      network_policy:
+        enabled: false
     external_services:
       grafana:
         internal_url: 'http://kube-prometheus-stack-grafana.monitoring/grafana'
