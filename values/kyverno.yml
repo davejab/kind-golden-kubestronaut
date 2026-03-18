@@ -2,6 +2,15 @@ admissionController:
   serviceMonitor:
     enabled: true
 backgroundController:
+  rbac:
+    clusterRole:
+      extraResources:
+      - apiGroups:
+        - ''
+        resources:
+        - namespaces
+        verbs:
+        - update
   serviceMonitor:
     enabled: true
 cleanupController:

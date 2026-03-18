@@ -1,3 +1,25 @@
+customPolicies:
+- apiVersion: kyverno.io/v1
+  kind: ClusterPolicy
+  metadata:
+    name: mutate-istio-label
+  spec:
+    rules:
+    - name: mutate-istio-label
+      match:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+      mutate:
+        mutateExistingOnPolicyUpdate: true
+        targets:
+          - apiVersion: v1
+            kind: Namespace
+        patchStrategicMerge:
+          metadata:
+            labels:
+              istio.io/dataplane-mode: ambient
 policyExclude:
   disallow-capabilities:
     any:
