@@ -24,11 +24,6 @@ apps:
   repo: https://kyverno.github.io/kyverno/
   chart: kyverno
   version: 3.7.1
-- name: kyverno-policies
-  namespace: kyverno
-  repo: https://kyverno.github.io/kyverno/
-  chart: kyverno-policies
-  version: 3.7.1
 - name: istio-base
   namespace: istio-system
   repo: https://istio-release.storage.googleapis.com/charts
@@ -59,3 +54,8 @@ apps:
   repo: https://argoproj.github.io/argo-helm
   chart: argo-cd
   version: 9.4.7
+- name: kyverno-policies
+  namespace: kyverno
+  repo: https://kyverno.github.io/kyverno/
+  chart: kyverno-policies
+  version: 3.7.1
