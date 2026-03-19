@@ -6,6 +6,13 @@ customPolicies:
   spec:
     rules:
     - name: mutate-istio-label
+      exclude:
+        any:
+        - resources:
+            kinds:
+            - Namespace
+            names:
+            - kube-system
       match:
         any:
         - resources:
@@ -16,6 +23,11 @@ customPolicies:
         targets:
           - apiVersion: v1
             kind: Namespace
+            selector:
+              matchExpressions:
+                - key: kubernetes.io/metadata.name
+                  operator: NotEquals
+                  value: kube-system
         patchStrategicMerge:
           metadata:
             labels:
