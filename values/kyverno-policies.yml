@@ -26,8 +26,9 @@ customPolicies:
             selector:
               matchExpressions:
                 - key: kubernetes.io/metadata.name
-                  operator: NotEquals
-                  value: kube-system
+                  operator: NotIn
+                  values:
+                    - kube-system
         patchStrategicMerge:
           metadata:
             labels:
