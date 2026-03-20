@@ -1,0 +1,84 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  destination:
+    namespace: nginx
+    server: https://kubernetes.default.svc
+  source:
+    path: nginx
+    repoURL: https://github.com/davejab/sample-apps
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: ingress.enabled
+          value: 'true'
+        - name: ingress.hosts[0].host
+  project: sample-apps
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  destination:
+    namespace: guestbook
+    server: https://kubernetes.default.svc
+  project: sample-apps
+  source:
+    path: helm-guestbook
+    repoURL: https://github.com/argoproj/argocd-example-apps
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: false
+      enabled: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bookinfo
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  destination:
+    namespace: bookinfo
+    server: https://kubernetes.default.svc
+  project: sample-apps
+  source:
+    path: bookinfo
+    repoURL: https://github.com/davejab/sample-apps
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: productpage.serviceMonitor.enabled
+          value: 'true'
+        - name: productpage.ingress.enabled
+          value: 'true'
+        - name: productpage.ingress.hosts[0].host
+  syncPolicy:
+    automated:
+      prune: false
+      enabled: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: sample-apps
+  namespace: argocd
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  destinations:
+  - name: in-cluster
+    namespace: '*'
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://github.com/davejab/sample-apps
+  - https://github.com/argoproj/argocd-example-apps
+
