@@ -38,3 +38,4 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 | Istio | [charts](https://github.com/istio/istio/tree/master/manifests/charts) | 1.29.0 | [docs](https://istio.io/latest/docs/) |
 | Kiali | [chart](https://github.com/kiali/helm-charts/tree/master/kiali-operator) | 2.22.0 | [docs](https://kiali.io/docs/) |
 | ArgoCD | [chart](https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd) | 9.4.7 | [docs](https://argo-cd.readthedocs.io/en/stable/) |
+| Backstage | [chart](https://github.com/backstage/charts/tree/main/charts/backstage) | 2.6.3 | [docs](https://backstage.io/docs/overview/generated-index) |

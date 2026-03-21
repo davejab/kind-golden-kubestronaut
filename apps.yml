@@ -59,3 +59,8 @@ apps:
   repo: https://kyverno.github.io/kyverno/
   chart: kyverno-policies
   version: 3.7.1
+- name: backstage
+  namespace: backstage
+  repo: https://backstage.github.io/charts
+  chart: backstage
+  version: 2.6.3

@@ -1,0 +1,75 @@
+backstage:
+  appConfig:
+    auth:
+      providers:
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
+    backend:
+      cors:
+        credentials: false
+      csp:
+        upgrade-insecure-requests: false
+
+  args:
+    - --config
+    - /app/app-config.yaml
+    - --config
+    - /dynamic-config/app-config.dynamic.yaml
+
+  initContainers:
+  - name: init-config
+    image: bitnami/kubectl:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        INGRESS_IP=$(kubectl get ingress {{ include "common.names.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        cat <<EOF > /dynamic-config/app-config.dynamic.yaml
+        app:
+          baseUrl: http://${INGRESS_IP}
+        backend:
+          baseUrl: http://${INGRESS_IP}
+          cors:
+            origin: http://${INGRESS_IP}
+        EOF
+    volumeMounts:
+      - name: dynamic-config
+        mountPath: /dynamic-config
+
+  extraVolumeMounts:
+    - name: dynamic-config
+      mountPath: /dynamic-config
+
+  extraVolumes:
+    - name: dynamic-config
+      emptyDir: {}
+
+extraDeploy:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: '{{ include "common.names.fullname" . }}'
+    namespace: "{{ .Release.Namespace }}"
+  rules:
+    - apiGroups: ["networking.k8s.io"]
+      resources: ["ingresses"]
+      verbs: ["get"]
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: '{{ include "common.names.fullname" . }}'
+    namespace: "{{ .Release.Namespace }}"
+  subjects:
+    - kind: ServiceAccount
+      name: '{{ include "backstage.serviceAccountName" . }}'
+      namespace: "{{ .Release.Namespace }}"
+  roleRef:
+    kind: Role
+    apiGroup: rbac.authorization.k8s.io
+    name: '{{ include "common.names.fullname" . }}'
+
+ingress:
+  enabled: true
+
+serviceAccount:
+  create: true
