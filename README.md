@@ -33,6 +33,7 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 | Grafana | [chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | 82.10.0 | [docs](https://grafana.com/docs/grafana/latest/) |
 | Alert Manager | [chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | 82.10.0 | [docs](https://prometheus.io/docs/alerting/latest/alertmanager/) |
 | Metrics Server | [chart](https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server) | 3.13.0 | [docs](https://github.com/kubernetes-sigs/metrics-server) |
+| Cert Manager | [chart](https://github.com/cert-manager/cert-manager/tree/master/deploy/charts/cert-manager) | v1.20.0 | [docs](https://cert-manager.io/docs/) |
 | Kyverno | [chart](https://github.com/kyverno/kyverno/tree/main/charts/kyverno) | 3.7.1 | [docs](https://kyverno.io/docs/introduction/) |
 | Kyverno Policies | [chart](https://github.com/kyverno/kyverno/tree/main/charts/kyverno-policies) | 3.7.1 | |
 | Istio | [charts](https://github.com/istio/istio/tree/master/manifests/charts) | 1.29.0 | [docs](https://istio.io/latest/docs/) |
