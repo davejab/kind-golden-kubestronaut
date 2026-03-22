@@ -1,5 +1,7 @@
 backstage:
   appConfig:
+    app:
+      title: Backstage
     auth:
       providers:
         guest:
@@ -9,12 +11,37 @@ backstage:
         credentials: false
       csp:
         upgrade-insecure-requests: false
+    catalog:
+      rules:
+        - allow: [Component, System, API, Resource, Location, User, Group]
+      locations:
+        - type: file
+          target: /config/catalog.yaml
+    kubernetes:
+      serviceLocatorMethod:
+        type: 'singleTenant'
+    organization:
+      name: Golden
+    proxy:
+      endpoints:
+        /bookinfo/details:
+          target: http://details.bookinfo.svc.cluster.local:9080
+          changeOrigin: true
+          credentials: dangerously-allow-unauthenticated
+        /bookinfo/reviews:
+          target: http://reviews.bookinfo.svc.cluster.local:9080
+          changeOrigin: true
+          credentials: dangerously-allow-unauthenticated
+        /bookinfo/ratings:
+          target: http://ratings.bookinfo.svc.cluster.local:9080
+          changeOrigin: true
+          credentials: dangerously-allow-unauthenticated
 
   args:
     - --config
     - /app/app-config.yaml
     - --config
-    - /dynamic-config/app-config.dynamic.yaml
+    - /config/app-config.yaml
 
   initContainers:
   - name: init-config
@@ -23,50 +50,384 @@ backstage:
       - /bin/sh
       - -c
       - |
-        INGRESS_IP=$(kubectl get ingress {{ include "common.names.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-        cat <<EOF > /dynamic-config/app-config.dynamic.yaml
-        app:
-          baseUrl: http://${INGRESS_IP}
-        backend:
-          baseUrl: http://${INGRESS_IP}
-          cors:
-            origin: http://${INGRESS_IP}
-        EOF
+        export INGRESS_IP=$(kubectl get ingress {{ include "common.names.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        export CA_DATA=$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | base64 -w 0)
+        export TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+        for f in $(find /config-map -type f); do envsubst < $f > /config/$(basename $f); done
     volumeMounts:
-      - name: dynamic-config
-        mountPath: /dynamic-config
+      - mountPath: /config
+        name: config
+      - mountPath: /config-map
+        name: config-map
 
   extraVolumeMounts:
-    - name: dynamic-config
-      mountPath: /dynamic-config
+    - mountPath: /config
+      name: config
 
   extraVolumes:
-    - name: dynamic-config
-      emptyDir: {}
+    - emptyDir: {}
+      name: config
+    - configMap:
+        name: config
+      name: config-map
 
 extraDeploy:
 - apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
+  kind: ClusterRole
   metadata:
     name: '{{ include "common.names.fullname" . }}'
-    namespace: "{{ .Release.Namespace }}"
   rules:
+    - apiGroups: [""]
+      resources:
+        - pods
+        - services
+        - configmaps
+        - limitranges
+        - resourcequotas
+        - namespaces
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["apps"]
+      resources:
+        - deployments
+        - replicasets
+        - statefulsets
+        - daemonsets
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["autoscaling"]
+      resources: ["horizontalpodautoscalers"]
+      verbs: ["get", "list", "watch"]
     - apiGroups: ["networking.k8s.io"]
       resources: ["ingresses"]
-      verbs: ["get"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["batch"]
+      resources: ["jobs", "cronjobs"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["metrics.k8s.io"]
+      resources: ["pods"]
+      verbs: ["get", "list"]
 - apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
+  kind: ClusterRoleBinding
   metadata:
     name: '{{ include "common.names.fullname" . }}'
-    namespace: "{{ .Release.Namespace }}"
   subjects:
     - kind: ServiceAccount
-      name: '{{ include "backstage.serviceAccountName" . }}'
+      name: '{{ include "common.names.fullname" . }}'
       namespace: "{{ .Release.Namespace }}"
   roleRef:
-    kind: Role
-    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
     name: '{{ include "common.names.fullname" . }}'
+    apiGroup: rbac.authorization.k8s.io
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: config
+    namespace: "{{ .Release.Namespace }}"
+  data:
+    app-config.yaml: |
+      app:
+        baseUrl: http://${INGRESS_IP}
+      backend:
+        baseUrl: http://${INGRESS_IP}
+        cors:
+          origin: http://${INGRESS_IP}
+      kubernetes:
+        clusterLocatorMethods:
+        - type: config
+          clusters:
+            - name: kind-golden
+              url: https://kubernetes.default.svc
+              authProvider: serviceAccount
+              serviceAccountToken: "${TOKEN}"
+              caData: |
+                ${CA_DATA}
+    catalog.yaml: |
+      apiVersion: backstage.io/v1alpha1
+      kind: Group
+      metadata:
+        name: guests
+        description: Guest users
+      spec:
+        type: team
+        profile:
+          displayName: Guests
+        children: []
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: System
+      metadata:
+        name: nginx
+        description: Nginx deployment
+      spec:
+        owner: guests
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: nginx
+        description: Nginx deployment
+        annotations:
+          backstage.io/kubernetes-id: nginx
+          backstage.io/kubernetes-namespace: nginx
+      spec:
+        type: service
+        lifecycle: production
+        owner: guests
+        system: nginx
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: System
+      metadata:
+        name: bookinfo
+        description: Sample application composed of microservices
+      spec:
+        owner: guests
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: productpage
+        description: Frontend of the bookinfo app
+        annotations:
+          backstage.io/kubernetes-id: productpage
+          backstage.io/kubernetes-namespace: bookinfo
+      spec:
+        type: website
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        dependsOn:
+          - component:default/details
+          - component:default/reviews
+        consumesApis:
+          - api:default/details-api
+          - api:default/reviews-api
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: details
+        description: Provides book details
+        annotations:
+          backstage.io/kubernetes-id: details
+          backstage.io/kubernetes-namespace: bookinfo
+      spec:
+        type: service
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        providesApis:
+          - details-api
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: reviews
+        description: Provides book reviews
+        annotations:
+          backstage.io/kubernetes-id: reviews
+          backstage.io/kubernetes-namespace: bookinfo
+      spec:
+        type: service
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        providesApis:
+          - reviews-api
+        consumesApis:
+          - api:default/ratings-api
+        dependsOn:
+          - component:default/ratings
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: ratings
+        description: Provides book ratings
+        annotations:
+          backstage.io/kubernetes-id: ratings
+          backstage.io/kubernetes-namespace: bookinfo
+      spec:
+        type: service
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        providesApis:
+          - ratings-api
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: API
+      metadata:
+        name: details-api
+        description: REST API provided by the details service
+      spec:
+        type: openapi
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        definition: |
+          openapi: 3.0.0
+          info:
+            title: Details API
+            version: v1
+          servers:
+          - url: http://${INGRESS_IP}/api/proxy/bookinfo/details
+          paths:
+            /details/{id}:
+              get:
+                summary: Get book details by ID
+                parameters:
+                  - name: id
+                    in: path
+                    required: true
+                    schema:
+                      type: integer
+                responses:
+                  '200':
+                    description: Book details
+                    content:
+                      application/json:
+                        schema:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            author:
+                              type: string
+                              example: William Shakespeare
+                            year:
+                              type: integer
+                              example: 1595
+                            type:
+                              type: string
+                              example: paperback
+                            pages:
+                              type: integer
+                              example: 200
+                            publisher:
+                              type: string
+                              example: PublisherA
+                            language:
+                              type: string
+                              example: English
+                            ISBN-10:
+                              type: string
+                              example: "1234567890"
+                            ISBN-13:
+                              type: string
+                              example: "123-1234567890"
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: API
+      metadata:
+        name: reviews-api
+        description: REST API provided by the reviews service
+      spec:
+        type: openapi
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        definition: |
+          openapi: 3.0.0
+          info:
+            title: Reviews API
+            version: v1
+          servers:
+          - url: http://${INGRESS_IP}/api/proxy/bookinfo/reviews
+          paths:
+            /reviews/{id}:
+              get:
+                summary: Get book reviews by ID
+                parameters:
+                  - name: id
+                    in: path
+                    required: true
+                    schema:
+                      type: integer
+                responses:
+                  '200':
+                    description: Book reviews
+                    content:
+                      application/json:
+                        schema:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            ratings:
+                              type: object
+                              additionalProperties:
+                                type: integer
+                              example:
+                                Reviewer1: 5
+                                Reviewer2: 4
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: API
+      metadata:
+        name: ratings-api
+        description: REST API provided by the ratings service
+      spec:
+        type: openapi
+        lifecycle: production
+        owner: guests
+        system: bookinfo
+        definition: |
+          openapi: 3.0.0
+          info:
+            title: Ratings API
+            version: v1
+          servers:
+          - url: http://${INGRESS_IP}/api/proxy/bookinfo/ratings
+          paths:
+            /ratings/{id}:
+              get:
+                summary: Get book ratings by ID
+                parameters:
+                  - name: id
+                    in: path
+                    required: true
+                    schema:
+                      type: integer
+                responses:
+                  '200':
+                    description: Book ratings
+                    content:
+                      application/json:
+                        schema:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: "1"
+                            podname:
+                              type: string
+                              example: reviews-v3-dbb6bbdd4-7bhw5
+                            clustername:
+                              type: string
+                              nullable: true
+                              example: "null"
+                            reviews:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  reviewer:
+                                    type: string
+                                    example: Reviewer1
+                                  text:
+                                    type: string
+                                    example: An extremely entertaining play by Shakespeare.
+                                  rating:
+                                    type: object
+                                    properties:
+                                      stars:
+                                        type: integer
+                                        example: 5
+                                      color:
+                                        type: string
+                                        example: red
 
 ingress:
   enabled: true
