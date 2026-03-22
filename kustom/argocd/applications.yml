@@ -19,6 +19,8 @@ spec:
         - name: ingress.enabled
           value: 'true'
         - name: ingress.hosts[0].host
+        - name: commonLabels.backstage\.io/kubernetes-id
+          value: nginx
   project: sample-apps
   syncPolicy:
     automated:
@@ -75,6 +77,14 @@ spec:
         - name: productpage.ingress.enabled
           value: 'true'
         - name: productpage.ingress.hosts[0].host
+        - name: details.labels.backstage\.io/kubernetes-id
+          value: details
+        - name: productpage.labels.backstage\.io/kubernetes-id
+          value: productpage
+        - name: reviews.labels.backstage\.io/kubernetes-id
+          value: reviews
+        - name: ratings.labels.backstage\.io/kubernetes-id
+          value: ratings
   syncPolicy:
     automated:
       prune: false
