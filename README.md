@@ -31,6 +31,9 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 | Cilium | [chart](https://github.com/cilium/cilium/tree/main/install/kubernetes/cilium) | 1.19.1 | [docs](https://docs.cilium.io/en/stable/) |
 | Prometheus | [chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | 82.10.0 | [docs](https://prometheus.io/docs/introduction/overview/), [operator](https://prometheus-operator.dev/docs/getting-started/introduction/) |
 | Grafana | [chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | 82.10.0 | [docs](https://grafana.com/docs/grafana/latest/) |
+| Loki | [chart](https://github.com/grafana-community/helm-charts/tree/main/charts/loki) | 6.55.0 | [docs](https://grafana.com/docs/loki/latest/) |
+| Alloy | [chart](https://github.com/grafana/alloy/tree/main/operations/helm/charts/alloy) | 1.6.2 | [docs](https://grafana.com/docs/alloy/latest/) |
+| Jaeger | [chart](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) | 4.6.0 | [docs](https://www.jaegertracing.io/docs/) |
 | Alert Manager | [chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | 82.10.0 | [docs](https://prometheus.io/docs/alerting/latest/alertmanager/) |
 | Metrics Server | [chart](https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server) | 3.13.0 | [docs](https://github.com/kubernetes-sigs/metrics-server) |
 | Cert Manager | [chart](https://github.com/cert-manager/cert-manager/tree/master/deploy/charts/cert-manager) | v1.20.0 | [docs](https://cert-manager.io/docs/) |

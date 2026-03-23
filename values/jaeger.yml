@@ -1,0 +1,91 @@
+agent:
+  enabled: false
+allInOne:
+  enabled: true
+collector:
+  enabled: false
+jaeger:
+  ingress:
+    enabled: true
+    hosts:
+      - ""
+query:
+  enabled: false
+storage:
+  type: memory
+userconfig:
+  service:
+    extensions: [jaeger_storage, jaeger_query, jaeger_mcp, remote_sampling, healthcheckv2, expvar, zpages]
+    pipelines:
+      traces:
+        receivers: [otlp, jaeger, zipkin]
+        processors: [batch]
+        exporters: [jaeger_storage_exporter]
+    telemetry:
+      resource:
+        service.name: jaeger
+      metrics:
+        level: detailed
+        readers:
+          - pull:
+              exporter:
+                prometheus:
+                  host: "${env:JAEGER_LISTEN_HOST:-localhost}"
+                  port: 8888
+      logs:
+        level: info
+  extensions:
+    jaeger_query:
+      base_path: /jaeger
+      storage:
+        traces: some_storage
+    jaeger_mcp:
+      http:
+        endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:16687"
+    jaeger_storage:
+      backends:
+        some_storage:
+          memory:
+            max_traces: 100000
+    remote_sampling:
+      file:
+        path:
+        default_sampling_probability: 1
+        reload_interval: 1s
+      http:
+        endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:5778"
+      grpc:
+        endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:5779"
+    healthcheckv2:
+      use_v2: true
+      http:
+        endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:13133"
+      grpc:
+    expvar:
+      endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:27777"
+    zpages:
+      endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:27778"
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:4317"
+        http:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:4318"
+    jaeger:
+      protocols:
+        grpc:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:14250"
+        thrift_http:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:14268"
+        thrift_binary:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:6832"
+        thrift_compact:
+          endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:6831"
+    zipkin:
+      endpoint: "${env:JAEGER_LISTEN_HOST:-localhost}:9411"
+  processors:
+    batch:
+  exporters:
+    jaeger_storage_exporter:
+      trace_storage: some_storage

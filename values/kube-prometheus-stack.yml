@@ -37,6 +37,30 @@ grafana:
       istio-workload-dashboard:
         gnetId: 7630
         revision: 298
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        url: http://loki.monitoring.svc.cluster.local:3100
+        access: proxy
+        isDefault: false
+      - name: Jaeger
+        type: jaeger
+        url: http://jaeger.monitoring.svc.cluster.local:16686/jaeger
+        access: proxy
+        isDefault: false
+        jsonData:
+          tracesToLogsV2:
+            datasourceUid: Loki
+            spanStartTimeShift: "-1m"
+            spanEndTimeShift: "1m"
+            tags:
+              - key: service.name
+                value: service
+              - key: k8s.pod.name
+                value: pod
   grafana.ini:
     auth.anonymous:
       enabled: true

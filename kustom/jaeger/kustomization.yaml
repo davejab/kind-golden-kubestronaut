@@ -1,0 +1,11 @@
+resources:
+  - all.yml
+
+patches:
+  - target:
+      kind: Ingress
+      name: jaeger
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/http/paths/0/path
+        value: /jaeger
