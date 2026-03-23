@@ -1,5 +1,6 @@
 resources:
   - all.yml
+  - servicemonitor.yml
 
 patches:
   - target:

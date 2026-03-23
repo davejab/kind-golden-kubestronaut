@@ -24,6 +24,11 @@ loki:
       admin: admin
 minio:
   enabled: true
+monitoring:
+  dashboards:
+    enabled: true
+  serviceMonitor:
+    enabled: true
 read:
   replicas: 0
 singleBinary:
