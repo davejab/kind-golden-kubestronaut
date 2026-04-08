@@ -31,17 +31,5 @@ nodes:
   - hostPath: ./storage
     containerPath: /var/local-path-provisioner/
     readOnly: false
-- role: worker
-  image: kindest/node:v1.35.1
-  extraMounts:  
-  - hostPath: ./storage
-    containerPath: /var/local-path-provisioner/
-    readOnly: false
-- role: worker
-  image: kindest/node:v1.35.1
-  extraMounts:  
-  - hostPath: ./storage
-    containerPath: /var/local-path-provisioner/
-    readOnly: false
 networking:
   disableDefaultCNI: true
