@@ -71,15 +71,18 @@ policyExclude:
         - cilium*
         - etcd-*-control-plane
         - istio-cni-node-*
+        - helper-pod-create-pvc-*
         - kube-apiserver-*-control-plane
         - kube-controller-manager-*-control-plane
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-proxy-*
         - kube-scheduler-*-control-plane
+        - opentelemetry-collector-agent-*
         - ztunnel-*
         namespaces:
         - istio-system
         - kube-system
+        - local-path-storage
         - monitoring
   disallow-host-ports:
     any:
@@ -93,6 +96,7 @@ policyExclude:
         - kube-controller-manager-*-control-plane
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-scheduler-*-control-plane
+        - opentelemetry-collector-agent-*
         namespaces:
         - kube-system
         - monitoring

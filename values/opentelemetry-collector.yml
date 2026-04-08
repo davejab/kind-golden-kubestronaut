@@ -1,0 +1,28 @@
+config:
+  exporters:
+    otlp_http:
+      endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
+  service:
+    pipelines:
+      logs:
+        exporters:
+          - otlp_http
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+
+mode: daemonset
+
+podMonitor:
+  enabled: true
+
+ports:
+  metrics:
+    enabled: true
+
+presets:
+  kubernetesAttributes:
+    enabled: true
+  logsCollection:
+    enabled: true
+    includeCollectorLogs: true

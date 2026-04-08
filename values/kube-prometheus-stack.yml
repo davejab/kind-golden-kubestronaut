@@ -58,9 +58,9 @@ grafana:
             spanEndTimeShift: "1m"
             tags:
               - key: service.name
-                value: service
+                value: service_name
               - key: k8s.pod.name
-                value: pod
+                value: k8s_pod_name
   grafana.ini:
     auth.anonymous:
       enabled: true
