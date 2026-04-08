@@ -4,10 +4,11 @@ Kind cluster with all golden kubestronaut apps installed. For educational purpos
 
 ## Pre-requisites
 
-- kind
-- cloud-provider-kind
-- go
-- helm
+- [docker](https://docs.docker.com/engine/install/)
+- [go](https://go.dev/doc/install)
+- [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [cloud-provider-kind](https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#install)
+- [helm](https://helm.sh/docs/intro/install/)
 
 ## Quick start
 
