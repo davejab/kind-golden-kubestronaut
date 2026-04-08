@@ -177,6 +177,28 @@ extraDeploy:
       apiVersion: backstage.io/v1alpha1
       kind: System
       metadata:
+        name: hotrod
+        description: Hotrod deployment
+      spec:
+        owner: guests
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: Component
+      metadata:
+        name: hotrod
+        description: Hotrod deployment
+        annotations:
+          backstage.io/kubernetes-id: hotrod
+          backstage.io/kubernetes-namespace: hotrod
+      spec:
+        type: service
+        lifecycle: production
+        owner: guests
+        system: hotrod
+      ---
+      apiVersion: backstage.io/v1alpha1
+      kind: System
+      metadata:
         name: bookinfo
         description: Sample application composed of microservices
       spec:
