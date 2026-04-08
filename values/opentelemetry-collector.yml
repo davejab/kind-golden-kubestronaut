@@ -1,12 +1,20 @@
 config:
   exporters:
-    otlp_http:
+    otlp_http/loki:
       endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
+    otlp_grpc/jaeger:
+      endpoint: http://jaeger.monitoring.svc.cluster.local:4317
+      tls:
+        insecure: true
+
   service:
     pipelines:
       logs:
         exporters:
-          - otlp_http
+          - otlp_http/loki
+      traces:
+        exporters:
+          - otlp_grpc/jaeger
 
 image:
   repository: otel/opentelemetry-collector-contrib
@@ -26,3 +34,6 @@ presets:
   logsCollection:
     enabled: true
     includeCollectorLogs: true
+
+service:
+  enabled: true
