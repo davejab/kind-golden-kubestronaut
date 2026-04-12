@@ -1,0 +1,6 @@
+
+manager:
+  collectorImage:
+    repository: otel/opentelemetry-collector-contrib
+  serviceMonitor:
+    enabled: true

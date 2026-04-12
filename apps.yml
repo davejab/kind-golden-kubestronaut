@@ -19,11 +19,16 @@ apps:
   repo: https://grafana-community.github.io/helm-charts
   chart: loki
   version: 6.55.0
-- name: opentelemetry-collector
+- name: cert-manager
+  namespace: cert-manager
+  repo: https://charts.jetstack.io
+  chart: cert-manager
+  version: v1.20.0
+- name: opentelemetry-operator
   namespace: monitoring
   repo: https://open-telemetry.github.io/opentelemetry-helm-charts
-  chart: opentelemetry-collector
-  version: 0.147.1
+  chart: opentelemetry-operator
+  version: 0.108.0
 - name: jaeger
   namespace: monitoring
   repo: https://jaegertracing.github.io/helm-charts
@@ -34,11 +39,6 @@ apps:
   repo: https://kubernetes-sigs.github.io/metrics-server
   chart: metrics-server
   version: 3.13.0
-- name: cert-manager
-  namespace: cert-manager
-  repo: https://charts.jetstack.io
-  chart: cert-manager
-  version: v1.20.0
 - name: kyverno
   namespace: kyverno
   repo: https://kyverno.github.io/kyverno/

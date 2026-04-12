@@ -71,6 +71,16 @@ spec:
     helm:
       valueFiles:
         - values.yaml
+      values: |
+        productpage:
+          podAnnotations:
+            instrumentation.opentelemetry.io/inject-python: "monitoring/traces"
+        reviews:
+          podAnnotations:
+            instrumentation.opentelemetry.io/inject-java: "monitoring/traces-metrics"
+        ratings:
+          podAnnotations:
+            instrumentation.opentelemetry.io/inject-nodejs: "monitoring/traces-metrics"
       parameters:
         - name: productpage.serviceMonitor.enabled
           value: 'true'

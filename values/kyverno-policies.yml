@@ -59,6 +59,7 @@ policyExclude:
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-proxy-*
         - kube-scheduler-*-control-plane
+        - opentelemetry-collector-*
         namespaces:
         - kube-system
         - monitoring
@@ -77,7 +78,7 @@ policyExclude:
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-proxy-*
         - kube-scheduler-*-control-plane
-        - opentelemetry-collector-agent-*
+        - opentelemetry-collector-*
         - ztunnel-*
         namespaces:
         - istio-system
@@ -96,7 +97,7 @@ policyExclude:
         - kube-controller-manager-*-control-plane
         - kube-prometheus-stack-prometheus-node-exporter-*
         - kube-scheduler-*-control-plane
-        - opentelemetry-collector-agent-*
+        - opentelemetry-collector-*
         namespaces:
         - kube-system
         - monitoring
