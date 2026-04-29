@@ -9,6 +9,7 @@ jaeger:
     enabled: true
     hosts:
       - ""
+    pathType: Prefix
 query:
   enabled: false
 storage:

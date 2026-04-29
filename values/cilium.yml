@@ -3,9 +3,9 @@ cni:
 dashboards:
   enabled: true
 envoy:
-  enabled: false
   prometheus:
-    enabled: false
+    serviceMonitor:
+      enabled: true
 hubble:
   enabled: true
   metrics:
@@ -26,8 +26,11 @@ hubble:
       enabled: true
       hosts:
       - ""
-ipam:
-  mode: kubernetes
+ingressController:
+  enabled: true
+  default: true
+kubeProxyReplacement: "true"
+k8sServiceHost: "auto"
 operator:
   prometheus:
     serviceMonitor:
@@ -36,3 +39,5 @@ prometheus:
   enabled: true
   serviceMonitor:
     enabled: true
+socketLB:
+  hostNamespaceOnly: true

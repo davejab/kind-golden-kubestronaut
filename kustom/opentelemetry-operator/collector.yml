@@ -206,12 +206,19 @@ spec:
         fieldRef:
           apiVersion: v1
           fieldPath: status.podIP
-  hostNetwork: true
   mode: daemonset
   observability:
     metrics:
       enableMetrics: true
   serviceAccount: opentelemetry-collector
+  volumeMounts:
+  - name: varlogpods
+    mountPath: /var/log/pods
+    readOnly: true
+  volumes:
+  - name: varlogpods
+    hostPath:
+      path: /var/log/pods
 ---
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation

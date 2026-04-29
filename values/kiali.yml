@@ -6,7 +6,7 @@ cr:
       strategy: "anonymous"
     deployment:
       ingress:
-        class_name: cloud-provider-kind
+        class_name: cilium
         enabled: true
       network_policy:
         enabled: false

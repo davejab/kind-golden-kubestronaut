@@ -18,6 +18,8 @@ spec:
       parameters:
         - name: ingress.enabled
           value: 'true'
+        - name: ingress.hosts[0].paths[0].pathType
+          value: 'Prefix'
         - name: ingress.hosts[0].host
         - name: commonLabels.backstage\.io/kubernetes-id
           value: nginx
@@ -86,6 +88,8 @@ spec:
           value: 'true'
         - name: productpage.ingress.enabled
           value: 'true'
+        - name: productpage.ingress.hosts[0].paths[0].pathType
+          value: 'Prefix'
         - name: productpage.ingress.hosts[0].host
         - name: details.labels.backstage\.io/kubernetes-id
           value: details
@@ -123,6 +127,8 @@ spec:
       parameters:
         - name: ingress.enabled
           value: 'true'
+        - name: ingress.hosts[0].paths[0].pathType
+          value: 'Prefix'
         - name: ingress.hosts[0].host
         - name: otel.exporterEndpoint
           value: http://opentelemetry-collector.monitoring.svc.cluster.local:4318

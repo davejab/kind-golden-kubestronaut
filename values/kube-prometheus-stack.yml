@@ -7,8 +7,9 @@ alertmanager:
     hosts: []
     paths:
     - "/alertmanager"
+    pathType: Prefix
 crds:
-  enabled: false  
+  enabled: false
 grafana:
   dashboardProviders:
     dashboardproviders.yaml:
@@ -73,12 +74,15 @@ grafana:
     hosts: []
     path: /grafana
     pathType: Prefix
+kubeProxy:
+  enabled: false
 prometheus:
   ingress:
     enabled: true
     hosts: []
     paths:
     - /prometheus
+    pathType: Prefix
   prometheusSpec:
     externalUrl: "/prometheus/"
     ignoreNamespaceSelectors: true
