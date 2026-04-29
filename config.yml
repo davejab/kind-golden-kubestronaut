@@ -4,10 +4,6 @@ name: golden
 nodes:
 - role: control-plane
   image: kindest/node:v1.35.1
-  extraMounts:  
-  - hostPath: ./storage
-    containerPath: /var/local-path-provisioner/
-    readOnly: false
   kubeadmConfigPatches:
   - |
     kind: ClusterConfiguration
@@ -23,10 +19,6 @@ nodes:
           listen-metrics-urls: http://0.0.0.0:2381
 - role: worker
   image: kindest/node:v1.35.1
-  extraMounts:  
-  - hostPath: ./storage
-    containerPath: /var/local-path-provisioner/
-    readOnly: false
 networking:
   disableDefaultCNI: true
   kubeProxyMode: "none"
