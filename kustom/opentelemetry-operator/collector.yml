@@ -206,6 +206,7 @@ spec:
         fieldRef:
           apiVersion: v1
           fieldPath: status.podIP
+  hostNetwork: true
   mode: daemonset
   observability:
     metrics:
