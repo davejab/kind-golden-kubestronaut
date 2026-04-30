@@ -1,86 +1,112 @@
+repos:
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+- name: cilium
+  url: https://helm.cilium.io/
+- name: grafana-community
+  url: https://grafana-community.github.io/helm-charts
+- name: jetstack
+  url: https://charts.jetstack.io
+- name: open-telemetry
+  url: https://open-telemetry.github.io/opentelemetry-helm-charts
+- name: jaeger
+  url: https://jaegertracing.github.io/helm-charts
+- name: metrics-server
+  url: https://kubernetes-sigs.github.io/metrics-server
+- name: kyverno
+  url: https://kyverno.github.io/kyverno/
+- name: istio
+  url: https://istio-release.storage.googleapis.com/charts
+- name: kiali
+  url: https://kiali.org/helm-charts
+- name: argo
+  url: https://argoproj.github.io/argo-helm
+- name: backstage
+  url: https://backstage.github.io/charts
+
 apps:
 - name: prometheus-operator-crds
   namespace: monitoring
-  repo: https://prometheus-community.github.io/helm-charts
+  repo: prometheus-community
   chart: prometheus-operator-crds
   version: 27.0.0
 - name: cilium
   namespace: kube-system
-  repo: https://helm.cilium.io/
+  repo: cilium
   chart: cilium
   version: 1.19.1
 - name: kube-prometheus-stack
   namespace: monitoring
-  repo: https://prometheus-community.github.io/helm-charts
+  repo: prometheus-community
   chart: kube-prometheus-stack
   version: 82.10.0
 - name: loki
   namespace: monitoring
-  repo: https://grafana-community.github.io/helm-charts
+  repo: grafana-community
   chart: loki
   version: 6.55.0
 - name: cert-manager
   namespace: cert-manager
-  repo: https://charts.jetstack.io
+  repo: jetstack
   chart: cert-manager
   version: v1.20.0
 - name: opentelemetry-operator
   namespace: monitoring
-  repo: https://open-telemetry.github.io/opentelemetry-helm-charts
+  repo: open-telemetry
   chart: opentelemetry-operator
   version: 0.108.0
 - name: jaeger
   namespace: monitoring
-  repo: https://jaegertracing.github.io/helm-charts
+  repo: jaeger
   chart: jaeger
   version: 4.6.0
 - name: metrics-server
   namespace: kube-system
-  repo: https://kubernetes-sigs.github.io/metrics-server
+  repo: metrics-server
   chart: metrics-server
   version: 3.13.0
 - name: kyverno
   namespace: kyverno
-  repo: https://kyverno.github.io/kyverno/
+  repo: kyverno
   chart: kyverno
   version: 3.7.1
 - name: istio-base
   namespace: istio-system
-  repo: https://istio-release.storage.googleapis.com/charts
+  repo: istio
   chart: base
   version: 1.29.0
 - name: istiod
   namespace: istio-system
-  repo: https://istio-release.storage.googleapis.com/charts
+  repo: istio
   chart: istiod
   version: 1.29.0
 - name: istio-cni
   namespace: istio-system
-  repo: https://istio-release.storage.googleapis.com/charts
+  repo: istio
   chart: cni
   version: 1.29.0
 - name: istio-ztunnel
   namespace: istio-system
-  repo: https://istio-release.storage.googleapis.com/charts
+  repo: istio
   chart: ztunnel
   version: 1.29.0
 - name: kiali
   namespace: istio-system
-  repo: https://kiali.org/helm-charts
+  repo: kiali
   chart: kiali-operator
   version: 2.22.0
 - name: argocd
-  namespace: argocd
-  repo: https://argoproj.github.io/argo-helm
+  namespace: argo
+  repo: argo
   chart: argo-cd
   version: 9.4.7
 - name: kyverno-policies
   namespace: kyverno
-  repo: https://kyverno.github.io/kyverno/
+  repo: kyverno
   chart: kyverno-policies
   version: 3.7.1
 - name: backstage
   namespace: backstage
-  repo: https://backstage.github.io/charts
+  repo: backstage
   chart: backstage
   version: 2.6.3

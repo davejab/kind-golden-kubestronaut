@@ -30,11 +30,20 @@ install() {
     version=$(echo $app | jq -r '.version')
     message=$(echo $app | jq -r '.message')
 
+    repo_url=$(yq ".repos[] | select(.name == \"$repo\") | .url" apps.yml)
+    [[ -z $repo_url ]] && echo "repo \"$repo\" not found" && exit 1
+
+    existing_url=$(helm repo list -o json | jq -r ".[] | select(.name == \"$repo\") | .url")
     # add helm repository for app
-    helm repo add $name $repo
+    if [[ -z $existing_url ]]; then
+        helm repo add $repo $repo_url
+    elif [[ $existing_url != $repo_url ]]; then
+        helm repo remove $repo
+        helm repo add $repo $repo_url
+    fi
 
     # set up helm args
-    helm_args="--install $name $name/$chart -n $namespace \
+    helm_args="--install $name $repo/$chart -n $namespace \
                 --version $version $extra_args"
 
     # append values file if it exists
@@ -54,7 +63,7 @@ install() {
 # install helm kustomize plugin
 helm plugin install kustom/ > /dev/null 2>&1
 
-if [[ "$target_app" == "" ]]; then
+if [[ -z $target_app ]]; then
     # no target app specified, install all apps
     while read -r app; do
         install "$app"
@@ -62,7 +71,7 @@ if [[ "$target_app" == "" ]]; then
 else
     # extract json payload for target app
     app=$(yq -o=j ".apps[] | select(.name == \"$target_app\")" $(dirname $0)/apps.yml | jq -c)
-    [[ "$app" == "" ]] && echo "app \"$target_app\" not found" && exit 1
+    [[ -z $app ]] && echo "app \"$target_app\" not found" && exit 1
     install "$app"
 fi
 
