@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: sample-apps
-  namespace: argocd
+  namespace: argo
   annotations:
     "helm.sh/hook": post-install
 spec:
